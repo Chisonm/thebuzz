@@ -35,6 +35,7 @@ module.exports = {
       },
       fontFamily: {
             sans: ['"Inter var", sans-serif, "Pacifico", cursive', ...defaultTheme.fontFamily.sans],
+            latruffe: ['latruffe'],
       },
     },
   },

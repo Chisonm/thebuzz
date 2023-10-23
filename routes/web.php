@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\BuzzController;
 use App\Http\Controllers\ProfileController;
 
@@ -29,5 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+Route::get('/server_commands', function(){
+	Artisan::call('php artisan config:cache');
+	Artisan::call('php artisan storage:link');
+	// any other commands that you may like to run
+});
 require __DIR__.'/auth.php';

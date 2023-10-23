@@ -13,7 +13,7 @@ class BuzzController extends Controller
 {
     public function index()
     {
-        $buzzs = Buzz::latest()->paginate();
+        $buzzs =  Buzz::latest()->paginate();
         return Inertia::render('Welcome', compact('buzzs'));
     }
 
@@ -26,7 +26,6 @@ class BuzzController extends Controller
             ]);
 
             DB::beginTransaction();
-            // dd($data);
 
 
             $imagePath = 'app/public/images/ems.png';
@@ -61,17 +60,16 @@ class BuzzController extends Controller
             DB::commit();
             // Check if the radio button is checked
             if ($request->input('subscribe_radio') === 'yes') {
-                //  return redirect()->away($buzz->image);
+                return redirect()->back()->with(['message' => 'You have been added to buzz successful! 🕺🏻🎉🎊', 'image_url' => $cloudinaryUrl]);
             }
 
             return redirect()->back()->with('message', 'You have been added to buzz successful! 🕺🏻🎉🎊');
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             if ($e instanceof \Illuminate\Validation\ValidationException) {
                 return redirect()->back()->withErrors($e->errors())->withInput();
             }
-            return redirect()->back()->with('message', 'Subscription failed!');
+            return redirect()->back()->with('error', 'Subscription failed!');
         }
     }
 }
