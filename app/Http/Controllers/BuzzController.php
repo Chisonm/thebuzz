@@ -13,7 +13,11 @@ class BuzzController extends Controller
 {
     public function index()
     {
-        $buzzs =  Buzz::latest()->paginate();
+        $buzzs =  Buzz::select('name', DB::raw('MIN(created_at) as earliest_created_at'))
+        ->groupBy('name')
+        ->latest('earliest_created_at')
+        ->take(30)
+        ->get();
         return Inertia::render('Welcome', compact('buzzs'));
     }
 
@@ -54,6 +58,7 @@ class BuzzController extends Controller
             $buzz = Buzz::create([
                 'name' => $firstname,
                 'email' => $request->input('email'),
+                'ip_address' => request()->ip(),
                 'image' => $cloudinaryUrl,
             ]);
 
